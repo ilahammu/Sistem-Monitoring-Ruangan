@@ -1,8 +1,16 @@
-import 'package:get/get.dart';
-import '../views/home_view.dart';
+part of 'app_pages.dart';
+// DO NOT EDIT. This is code generated via package:get_cli/get_cli.dart
 
-class AppRoutes {
-  static const String home = '/';
+abstract class Routes {
+  Routes._();
 
-  static final routes = [GetPage(name: home, page: () => HomeView())];
+  static const home = _Paths.home;
+  static const riwayat = _Paths.riwayat;
+}
+
+abstract class _Paths {
+  _Paths._();
+
+  static const home = '/home';
+  static const riwayat = '/riwayat';
 }

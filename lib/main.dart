@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'routes/app_routes.dart';
+import 'package:tubes_prd/routes/app_pages.dart';
 
 void main() {
   runApp(MyApp());
@@ -11,8 +11,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: AppRoutes.home,
-      getPages: AppRoutes.routes,
+      initialRoute: AppPages.initial,
+      getPages: AppPages.routes,
     );
   }
 }

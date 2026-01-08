@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../controllers/home_controller.dart';
 
-class HomeView extends StatelessWidget {
+class HomeView extends GetView {
   final HomeController controller = Get.put(HomeController());
 
   @override
@@ -96,10 +96,56 @@ class HomeView extends StatelessWidget {
                         ),
                         color: const Color.fromARGB(33, 159, 184, 204),
                       ),
+                      SizedBox(height: 10),
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            print("anjay");
+                            Get.toNamed('/riwayat');
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.transparent,
+                            shadowColor: Colors.transparent,
+                          ),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                width: 1,
+                                color: const Color.fromARGB(255, 170, 145, 145),
+                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.15),
+                                  blurRadius: 1,
+                                  offset: Offset(0, 2),
+                                ),
+                              ],
+                              gradient: LinearGradient(
+                                colors: [
+                                  Color.fromARGB(129, 88, 77, 120),
+                                  Color.fromARGB(255, 96, 82, 148),
+                                ],
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                              ),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            padding: EdgeInsets.symmetric(
+                              vertical: 8,
+                              horizontal: 16,
+                            ),
+                            child: Text(
+                              'Chect Data Table ->',
+                              style: TextStyle(
+                                color: const Color.fromARGB(255, 255, 254, 254),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
-                  SizedBox(height: 16),
-                  _tampilTabel(),
                 ],
               ),
               SizedBox(height: 16),
@@ -233,124 +279,4 @@ class HomeView extends StatelessWidget {
   }
 
   // Tabel riwayat data sensor dengan pagination
-  Widget _tampilTabel() {
-    final controller = Get.find<HomeController>();
-    return Obx(() {
-      final data = controller.tabelData;
-      final page = controller.currentPage.value;
-      final pageSize = 5;
-      final totalPage = (data.length / pageSize).ceil();
-      final start = page * pageSize;
-      final end = (start + pageSize) > data.length
-          ? data.length
-          : (start + pageSize);
-      final pageData = data.sublist(start, end);
-
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Text(
-            'Riwayat Data Sensor',
-            style: GoogleFonts.kiteOne(
-              fontSize: 18,
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          SizedBox(height: 8),
-          Container(
-            decoration: BoxDecoration(
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.15),
-                  blurRadius: 12,
-                  offset: Offset(0, 2),
-                ),
-              ],
-              border: Border.all(
-                color: const Color.fromARGB(255, 105, 78, 109),
-                width: 1.5,
-              ),
-              color: const Color.fromARGB(255, 185, 41, 41).withOpacity(0.1),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: DataTable(
-              headingRowColor: MaterialStateProperty.all(
-                const Color.fromARGB(14, 148, 118, 200).withOpacity(0.2),
-              ),
-              columns: const [
-                DataColumn(
-                  label: Text('Waktu', style: TextStyle(color: Colors.white)),
-                ),
-                DataColumn(
-                  label: Text('Suhu', style: TextStyle(color: Colors.white)),
-                ),
-                DataColumn(
-                  label: Text(
-                    'Kelembapan',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-                DataColumn(
-                  label: Text('Status', style: TextStyle(color: Colors.white)),
-                ),
-              ],
-              rows: pageData.map((row) {
-                return DataRow(
-                  cells: [
-                    DataCell(
-                      Text(
-                        row['created_at'] ?? '-',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
-                    DataCell(
-                      Text(
-                        '${row['temperature']}°C',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
-                    DataCell(
-                      Text(
-                        '${row['humidity']}%',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
-                    DataCell(
-                      Text(
-                        row['status'] ?? '-',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
-                  ],
-                );
-              }).toList(),
-            ),
-          ),
-          if (totalPage > 1)
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                IconButton(
-                  icon: Icon(Icons.arrow_back, color: Colors.white),
-                  onPressed: page > 0
-                      ? () => controller.currentPage.value--
-                      : null,
-                ),
-                Text(
-                  '${page + 1} / $totalPage',
-                  style: TextStyle(color: Colors.white),
-                ),
-                IconButton(
-                  icon: Icon(Icons.arrow_forward, color: Colors.white),
-                  onPressed: page < totalPage - 1
-                      ? () => controller.currentPage.value++
-                      : null,
-                ),
-              ],
-            ),
-        ],
-      );
-    });
-  }
 }
