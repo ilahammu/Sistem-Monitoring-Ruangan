@@ -1,4 +1,4 @@
-// ignore_for_file: deprecated_member_use
+// Widget animasi WARNING fade in/out penuh
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -101,7 +101,6 @@ class HomeView extends GetView {
                         alignment: Alignment.centerRight,
                         child: ElevatedButton(
                           onPressed: () {
-                            print("anjay");
                             Get.toNamed('/riwayat');
                           },
                           style: ElevatedButton.styleFrom(
@@ -149,7 +148,7 @@ class HomeView extends GetView {
                 ],
               ),
               SizedBox(height: 16),
-              _buildIndicators(),
+              Obx(() => _buildIndicators()),
             ],
           ),
         ),
@@ -174,31 +173,16 @@ class HomeView extends GetView {
         ? Colors.green
         : Colors.green.withOpacity(0.3);
     Color yellowColor =
-        ((suhu >= 28.1 && suhu <= 31) || (kelembapan >= 50 && kelembapan <= 74))
+        ((suhu >= 28 && suhu <= 31) || (kelembapan >= 50 && kelembapan <= 75))
         ? Colors.yellow
         : Colors.yellow.withOpacity(0.3);
-    Color redColor = (suhu > 31.1 || kelembapan > 75)
+    Color redColor = (suhu > 31 || kelembapan > 75)
         ? Colors.red
         : Colors.red.withOpacity(0.3);
 
     return Column(
       children: [
-        if (suhu > 31.1 || kelembapan > 75)
-          Container(
-            padding: EdgeInsets.symmetric(vertical: 12, horizontal: 24),
-            decoration: BoxDecoration(
-              color: Colors.red.withOpacity(0.8),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Text(
-              'WARNING',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
+        _warningBanner(suhu > 31 || kelembapan > 75),
         SizedBox(height: 8),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -275,6 +259,36 @@ class HomeView extends GetView {
           value,
         ],
       ),
+    );
+  }
+
+  Widget _warningBanner(bool show) {
+    return AnimatedOpacity(
+      opacity: show ? 1.0 : 0.0,
+      duration: Duration(milliseconds: 600),
+      curve: Curves.easeInOut,
+      child: show
+          ? Container(
+              width: double.infinity,
+              padding: EdgeInsets.symmetric(vertical: 16),
+              margin: EdgeInsets.symmetric(horizontal: 2),
+              decoration: BoxDecoration(
+                color: const Color.fromARGB(154, 244, 67, 54).withValues(),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Center(
+                child: Text(
+                  'WARNING',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 5,
+                  ),
+                ),
+              ),
+            )
+          : SizedBox.shrink(),
     );
   }
 

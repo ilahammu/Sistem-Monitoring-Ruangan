@@ -1,14 +1,25 @@
 import 'package:get/get.dart';
 import 'package:dio/dio.dart';
 import 'dart:convert';
+import 'dart:async';
 
 class HomeController extends GetxController {
   var data = <String, dynamic>{'suhu': 'Meledak', 'kelembapan': 'Meledak'}.obs;
+  Timer? _timer;
 
   @override
   void onInit() {
     super.onInit();
     fetchData();
+    _timer = Timer.periodic(Duration(seconds: 5), (timer) {
+      fetchData();
+    });
+  }
+
+  @override
+  void onClose() {
+    _timer?.cancel();
+    super.onClose();
   }
 
   void fetchData() async {
@@ -18,11 +29,14 @@ class HomeController extends GetxController {
         'https://wrrd8tmv-3000.asse.devtunnels.ms/api/latest',
       );
       if (response.statusCode == 200) {
-        final fetchedData = response.data is String
+        final rawData = response.data is String
             ? json.decode(response.data)
             : response.data;
-        data['suhu'] = '${fetchedData['temperature']}°C';
-        data['kelembapan'] = '${fetchedData['humidity']}%';
+        final latest = (rawData is List && rawData.isNotEmpty)
+            ? rawData.last
+            : rawData;
+        data['suhu'] = '${latest['temperature']}°C';
+        data['kelembapan'] = '${latest['humidity']}%';
       } else {
         print('Failed to fetch data: ${response.statusCode}');
       }
