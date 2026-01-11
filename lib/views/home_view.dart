@@ -169,16 +169,30 @@ class HomeView extends GetView {
         ) ??
         0.0;
 
-    Color greenColor = (suhu < 28 && kelembapan < 50)
-        ? Colors.green
-        : Colors.green.withOpacity(0.3);
-    Color yellowColor =
-        ((suhu >= 28 && suhu <= 31) || (kelembapan >= 50 && kelembapan <= 75))
-        ? Colors.yellow
-        : Colors.yellow.withOpacity(0.3);
-    Color redColor = (suhu > 31 || kelembapan > 75)
-        ? Colors.red
-        : Colors.red.withOpacity(0.3);
+    Color greenColor, yellowColor, redColor;
+
+    if ((suhu < 20 || suhu > 35) || (kelembapan < 30 || kelembapan > 70)) {
+      // LAMPU MERAH NYALA
+      redColor = Colors.red;
+      yellowColor = Colors.yellow.withOpacity(0.3);
+      greenColor = const Color.fromARGB(255, 38, 237, 45).withOpacity(0.3);
+    } else if ((suhu > 30 && suhu <= 35) ||
+        (kelembapan >= 60 && kelembapan <= 70)) {
+      // LAMPU KUNING NYALA
+      redColor = Colors.red.withOpacity(0.3);
+      yellowColor = Colors.yellow;
+      greenColor = Colors.green.withOpacity(0.3);
+    } else if ((suhu > 23 && suhu < 30) ||
+        (kelembapan >= 40 && kelembapan < 60)) {
+      // LAMPU HIJAU NYALA
+      redColor = Colors.red.withOpacity(0.3);
+      yellowColor = Colors.yellow.withOpacity(0.3);
+      greenColor = const Color.fromARGB(255, 0, 255, 8);
+    } else {
+      redColor = Colors.red.withOpacity(0.3);
+      yellowColor = Colors.yellow.withOpacity(0.3);
+      greenColor = Colors.green.withOpacity(0.3);
+    }
 
     return Column(
       children: [
@@ -187,9 +201,9 @@ class HomeView extends GetView {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            _indicator(30, greenColor, 'Low'),
-            _indicator(30, yellowColor, 'Medium'),
-            _indicator(30, redColor, 'High'),
+            _indicator(30, greenColor, 'Normal'),
+            _indicator(30, yellowColor, 'Caution'),
+            _indicator(30, redColor, 'Warning'),
           ],
         ),
       ],

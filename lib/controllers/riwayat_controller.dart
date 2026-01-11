@@ -84,6 +84,14 @@ class RiwayatController extends GetxController {
             }
           }
           map['created_at'] = waktu;
+          // Ubah status dari 'green', 'yellow', 'red' menjadi 'Normal', 'Caution', 'Warning'
+          if (map['status'] == 'green') {
+            map['status'] = 'Normal';
+          } else if (map['status'] == 'yellow') {
+            map['status'] = 'Caution';
+          } else if (map['status'] == 'red') {
+            map['status'] = 'Warning';
+          }
           return map;
         }).toList();
         tabelData.value = List<Map<String, dynamic>>.from(
@@ -99,7 +107,7 @@ class RiwayatController extends GetxController {
   void onInit() {
     super.onInit();
     fetchTableData();
-    _timer = Timer.periodic(Duration(seconds: 5), (timer) {
+    _timer = Timer.periodic(Duration(seconds: 3), (timer) {
       fetchTableData();
     });
   }

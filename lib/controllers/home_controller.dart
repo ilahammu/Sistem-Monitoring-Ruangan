@@ -11,7 +11,7 @@ class HomeController extends GetxController {
   void onInit() {
     super.onInit();
     fetchData();
-    _timer = Timer.periodic(Duration(seconds: 5), (timer) {
+    _timer = Timer.periodic(Duration(seconds: 3), (timer) {
       fetchData();
     });
   }
